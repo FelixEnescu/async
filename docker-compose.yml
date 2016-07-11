@@ -1,0 +1,38 @@
+# General config
+# dev related goes to : docker-compose.override.yml
+# prod related goes to : docker-compose.prod.yml
+
+version: '2'
+
+services:
+    redis:
+        image: redis
+        volumes:
+            - ./redis:/data
+
+    worker:
+        build: .
+        command: [ celery, worker, -A, app.celery, --loglevel=info ]
+        environment:
+            C_FORCE_ROOT: ALLOW
+        volumes:
+            - .:/async
+        depends_on:
+            - redis
+        links:
+            - redis
+
+    async:
+        build: .
+        command: [ python, app.py ]
+        ports:
+            - "5000:5000"
+        volumes:
+            - .:/async
+        depends_on:
+            - redis
+            - worker
+        links:
+            - redis
+
+
