@@ -30,4 +30,5 @@ $ curl  -D -  http://localhost:5000/mount/process-status
 Notes:
  - Application uses Flask with Celery and Redis as queue
  - It is minimal, no checks are performed if for example one tries to launch two processes at same time
+ - This is a demo for Sam Hazar
 
